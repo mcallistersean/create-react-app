@@ -19,16 +19,20 @@ var InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 var WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 var getClientEnvironment = require('./env');
 var paths = require('./paths');
+var urlPaths = require('./utils');
 
+// In development we default to using '/' as the path to the root of the application.
+// This can be overridden with the CDN_URL_ENV environment variable
+var basePath = process.env.CDN_URL_DEV ? process.env.URL_CDN_DEV : '/';
 // Webpack uses `publicPath` to determine where the app is being served from.
-// In development, we always serve from the root. This makes config easier.
-var publicPath = '/';
+var wpPublicPath = urlPaths.ensureSlash(basePath, true);
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing shlash as %PUBLIC_PATH%/xyz looks better than %PUBLIC_PATH%xyz.
-var publicUrl = '';
+var publicUrl = urlPaths.ensureSlash(basePath, false);
 // Get enrivonment variables to inject into our app.
 var env = getClientEnvironment(publicUrl);
+
 
 // This is the development configuration.
 // It is focused on developer experience and fast rebuilds.
@@ -72,7 +76,7 @@ module.exports = {
     // containing code from all our entry points, and the Webpack runtime.
     filename: 'static/js/bundle.js',
     // This is the URL that app is served from. We use "/" in development.
-    publicPath: publicPath
+    publicPath: wpPublicPath
   },
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.
