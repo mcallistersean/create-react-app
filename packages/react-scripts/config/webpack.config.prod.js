@@ -18,7 +18,7 @@ var InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 var url = require('url');
 var paths = require('./paths');
 var getClientEnvironment = require('./env');
-var urlPaths = require('./utils');
+var ensureSlash = require('./utils').ensureSlash;
 
 
 // We use "homepage" field to infer "public path" at which the app is served.
@@ -27,14 +27,14 @@ var urlPaths = require('./utils');
 // We can't use a relative path in HTML because we don't want to load something
 // like /todos/42/static/js/bundle.7289d.js. We have to know the root.
 var homepagePath = require(paths.appPackageJson).homepage;
-var basePath = homepagePath ? homepagePath : (process.env.CDN_URL ? process.env.CDN_URL : '/');
+var baseUrl = homepagePath ? homepagePath : (process.env.CRA_PUBLIC_URL ? process.env.CRA_PUBLIC_URL : '/');
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
-var wpPublicPath = ensureSlash(basePath, true);
+var wpPublicPath = ensureSlash(baseUrl, true);
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing shlash as %PUBLIC_PATH%/xyz looks better than %PUBLIC_PATH%xyz.
-var publicUrl = ensureSlash(basePath, false);
+var publicUrl = ensureSlash(baseUrl, false);
 // Get enrivonment variables to inject into our app.
 var env = getClientEnvironment(publicUrl);
 

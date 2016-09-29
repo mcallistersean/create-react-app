@@ -19,17 +19,17 @@ var InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 var WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 var getClientEnvironment = require('./env');
 var paths = require('./paths');
-var urlPaths = require('./utils');
+var ensureSlash = require('./utils').ensureSlash;
 
 // In development we default to using '/' as the path to the root of the application.
-// This can be overridden with the CDN_URL_ENV environment variable
-var basePath = process.env.CDN_URL_DEV ? process.env.URL_CDN_DEV : '/';
+// This can be overridden with the CRA_PUBLIC_URL environment variable
+var baseUrl = process.env.CRA_PUBLIC_URL ? process.env.CRA_PUBLIC_URL : '/';
 // Webpack uses `publicPath` to determine where the app is being served from.
-var wpPublicPath = urlPaths.ensureSlash(basePath, true);
+var wpPublicPath = ensureSlash(baseUrl, true);
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing shlash as %PUBLIC_PATH%/xyz looks better than %PUBLIC_PATH%xyz.
-var publicUrl = urlPaths.ensureSlash(basePath, false);
+var publicUrl = ensureSlash(basePath, false);
 // Get enrivonment variables to inject into our app.
 var env = getClientEnvironment(publicUrl);
 
